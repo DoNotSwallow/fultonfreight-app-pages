@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connecting… — Fulton Freight</title>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="wordmark">Fulton <span>Freight</span></div>
+  <div class="doc-meta">OAuth connector</div>
+</header>
+<main>
+<h1>Finishing the connection…</h1>
+<p id="status">Forwarding the authorization to your local application.</p>
+<p id="fallback" style="display:none">If nothing happens, the local
+application may not be running, or it may be on a different port. Try:
+<a id="alt1" href="#">forward to port 8792</a> ·
+<a id="alt2" href="#">forward to port 8799</a></p>
+
+<script>
+// OAuth redirects are followed by the BROWSER, so this public page can hand
+// the authorization straight to the app running on this machine — no tunnel
+// or public server required. The app may append ".p<port>" to the OAuth
+// state to select the local port; default is the production service port.
+(function () {
+  var search = window.location.search || "";
+  var params = new URLSearchParams(search);
+  var state = params.get("state") || "";
+  var match = state.match(/\.p(\d{2,5})$/);
+  var port = match ? match[1] : "8792";
+  var target = "http://localhost:" + port + "/api/qbo/oauth/callback" + search;
+  document.getElementById("alt1").href = "http://localhost:8792/api/qbo/oauth/callback" + search;
+  document.getElementById("alt2").href = "http://localhost:8799/api/qbo/oauth/callback" + search;
+  setTimeout(function () { document.getElementById("fallback").style.display = "block"; }, 4000);
+  if (params.get("code")) {
+    window.location.replace(target);
+  } else {
+    document.getElementById("status").textContent =
+      "No authorization data present — start the connection from the application.";
+  }
+})();
+</script>
+</main>
+<div class="footer">© 2026 Fulton Freight, LLC</div>
+</body>
+</html>
