@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Connecting QuickBooks…</title>
+<script>
+  // Intuit lands here with ?code=…&state=…&realmId=…. This page's only job
+  // is to hand that query to the warehouse running on THIS computer (dev).
+  location.replace("http://localhost:8799/api/qbo/oauth/callback" + location.search);
+</script>
+<p style="font:15px -apple-system,sans-serif">
+  Finishing the QuickBooks connection…<br>
+  If nothing happens, copy this page's full URL from the address bar and
+  paste it at <b>http://localhost:8799/qbo/connect</b>.
+</p>
